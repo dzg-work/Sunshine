@@ -49,8 +49,12 @@ public class ForecastFragment extends Fragment {
     public boolean onOptionsItemSelected (MenuItem item) {
 
         int id = item.getItemId();
-
-        return id == R.id.action_refresh || super.onOptionsItemSelected(item);
+        if (id == R.id.action_refresh) {
+            FetchWeatherTask weatherTask = new FetchWeatherTask();
+            weatherTask.execute();
+            return  true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -93,7 +97,7 @@ public class ForecastFragment extends Fragment {
         return rootView;
     }
 
-    private class FetchWeatherTask extends AsyncTask<Void, Void, Void> {
+    public class FetchWeatherTask extends AsyncTask<Void, Void, Void> {
 
         private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
 
