@@ -203,9 +203,6 @@ public class ForecastFragment extends Fragment{
                 resultStrs[i] = day + " - " + description + " - " + highAndLow;
             }
 
-            for (String s : resultStrs) {
-                Log.v(LOG_TAG, "Forecast entry: " + s);
-            }
             return resultStrs;
 
         }
@@ -254,8 +251,6 @@ public class ForecastFragment extends Fragment{
                         .build();
 
 
-                //String baseUrl = "http://api.openweathermap.org/data/2.5/forecast/daily?q=" + city + "&mode=json&units=metric&cnt=7";
-                //String apiKey = "&appid=" + BuildConfig.OPEN_WEATHER_MAP_API_KEY;
                 URL url = new URL(builtUri.toString());
 
                 Log.v(LOG_TAG, "Built URI " + builtUri.toString());
