@@ -110,7 +110,8 @@ public class ForecastFragment extends Fragment{
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast toast = Toast.makeText(getContext().getApplicationContext(), "We'll bang, ok?", Toast.LENGTH_SHORT);
+                String forecast = mForecastAdapter.getItem(position);
+                Toast toast = Toast.makeText(getContext().getApplicationContext(), forecast, Toast.LENGTH_SHORT);
                 toast.show();
             }
         });
@@ -320,12 +321,14 @@ public class ForecastFragment extends Fragment{
         }
 
         @Override
-        protected void onPostExecute(String[] strings) {
+        protected void onPostExecute(String[] result) {
 
-            mForecastAdapter.clear();
+            if (result != null) {
+                mForecastAdapter.clear();
 
-            for(String dayForecastStr : strings) {
-                mForecastAdapter.add(dayForecastStr);
+                for(String dayForecastStr : result) {
+                    mForecastAdapter.add(dayForecastStr);
+                }
             }
 
         }
