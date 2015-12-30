@@ -273,7 +273,7 @@ public class ForecastFragment extends Fragment{
 
                 // Read the input stream into a String
                 InputStream inputStream = urlConnection.getInputStream();
-                StringBuilder buffer = new StringBuilder();
+                StringBuffer buffer = new StringBuffer();
                 if (inputStream == null) {
                     // Nothing to do.
                     return null;
@@ -285,7 +285,7 @@ public class ForecastFragment extends Fragment{
                     // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
                     // But it does make debugging a *lot* easier if you print out the completed
                     // buffer for debugging.
-                    buffer.append(line).append("\n");
+                    buffer.append(line + "\n");
                 }
 
                 if (buffer.length() == 0) {
