@@ -14,6 +14,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
 
         addPreferencesFromResource(R.xml.pref_general);
 
+
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_location_key)));
     }
 
@@ -53,5 +54,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         }
         return true;
     }
+
+
 
 }

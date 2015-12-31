@@ -40,10 +40,12 @@ public class DetailActivity extends AppCompatActivity {
         switch(id) {
             case R.id.action_settings:
                 startActivity(new Intent(this,SettingsActivity.class));
+
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
 
 
 
