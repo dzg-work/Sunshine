@@ -30,15 +30,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ForecastFragment extends Fragment{
+public class ForecastFragment extends Fragment {
 
     public ArrayAdapter<String> mForecastAdapter;
 
@@ -63,13 +61,9 @@ public class ForecastFragment extends Fragment{
 
         int id = item.getItemId();
 
-        switch (id){
+        switch (id) {
             case R.id.action_refresh:
-                FetchWeatherTask weatherTask = new FetchWeatherTask();
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                String location = sharedPref.getString(getString(R.string.pref_location_key),
-                        getString(R.string.pref_location_default));
-                weatherTask.execute(location);
+                updateWeather();
                 return true;
 
         }
@@ -82,23 +76,7 @@ public class ForecastFragment extends Fragment{
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        String[] forecast;
-        forecast = new String[]{
-                "Mon 6/23 - Sunny - 31/17",
-                "Tue 6/24 - Foggy - 21/8",
-                "Wed 6/25 - Cloudy - 22/17",
-                "Thurs 6/26 - Rainy - 18/11",
-                "Fri 6/27 - Foggy - 21/10",
-                "Sat 6/28 - TRAPPED IN WEATHERSTATION - 23/18",
-                "Sun 6/29 - Sunny - 20/7"
-        };
-
-
-
-        List<String> weekForecast = new ArrayList<>(Arrays.asList(forecast));
-
-        // Now that we have some dummy forecast data, create an ArrayAdapter.
-        // The ArrayAdapter will take data from a source (like our dummy forecast) and
+        // The ArrayAdapter will take data from a source and
         // use it to populate the ListView it's attached to.
 
 
@@ -106,7 +84,7 @@ public class ForecastFragment extends Fragment{
                 getActivity(),
                 R.layout.list_item_forecast,
                 R.id.list_item_forecast_textview,
-                weekForecast);
+                new ArrayList<String>());
 
         //View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -116,7 +94,7 @@ public class ForecastFragment extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String forecast = mForecastAdapter.getItem(position);
-                Intent detailActivity = new Intent(getActivity(),DetailActivity.class)
+                Intent detailActivity = new Intent(getActivity(), DetailActivity.class)
                         .putExtra(Intent.EXTRA_TEXT, forecast);
                 startActivity(detailActivity);
 
@@ -127,6 +105,22 @@ public class ForecastFragment extends Fragment{
         return rootView;
     }
 
+
+    private void updateWeather() {
+        FetchWeatherTask weatherTask = new FetchWeatherTask();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String location = prefs.getString(getString(R.string.pref_location_key),
+                getString(R.string.pref_location_default));
+        weatherTask.execute(location);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateWeather();
+    }
+
+
     public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
         private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
@@ -134,7 +128,7 @@ public class ForecastFragment extends Fragment{
         /* The date/time conversion code is going to be moved outside the asynctask later,
          * so for convenience we're breaking it out into its own method now.
          */
-        private String getReadableDateString(Date time){
+        private String getReadableDateString(Date time) {
             // Because the API returns a unix timestamp (measured in seconds),
             // it must be converted to milliseconds in order to be converted to valid date.
             SimpleDateFormat shortenedDateFormat = new SimpleDateFormat("EEE MMM dd");
@@ -155,7 +149,7 @@ public class ForecastFragment extends Fragment{
         /**
          * Take the String representing the complete forecast in JSON Format and
          * pull out the data we need to construct the Strings needed for the wireframes.
-         *
+         * <p/>
          * Fortunately parsing is easy:  constructor takes the JSON string and converts it
          * into an Object hierarchy for us.
          */
@@ -182,11 +176,11 @@ public class ForecastFragment extends Fragment{
             // normalized UTC date for all of our weather.
 
             Calendar currentTime = Calendar.getInstance();
-            Calendar dateTimeCalendar = (Calendar)currentTime.clone();
+            Calendar dateTimeCalendar = (Calendar) currentTime.clone();
 
 
             String[] resultStrs = new String[numDays];
-            for(int i = 0; i < weatherArray.length(); i++) {
+            for (int i = 0; i < weatherArray.length(); i++) {
                 // For now, using the format "Day, description, hi/low"
                 String day;
                 String description;
@@ -223,11 +217,12 @@ public class ForecastFragment extends Fragment{
             return resultStrs;
 
         }
+
         @Override
         protected String[] doInBackground(String... zip) {
 
 
-            if(zip.length == 0) {
+            if (zip.length == 0) {
                 return null;
             }
 
@@ -333,7 +328,7 @@ public class ForecastFragment extends Fragment{
             if (result != null) {
                 mForecastAdapter.clear();
 
-                for(String dayForecastStr : result) {
+                for (String dayForecastStr : result) {
                     mForecastAdapter.add(dayForecastStr);
                 }
             }
