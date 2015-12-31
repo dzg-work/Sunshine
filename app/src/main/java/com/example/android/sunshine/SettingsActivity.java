@@ -12,9 +12,12 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        addPreferencesFromResource(R.xml.pref_general);
 
-
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_location_key)));
     }
+
+
     /**
      * Attaches a listener so the summary is always updated with the preference value.
      * Also fires the listener once, to initialize the summary (so it shows up before the value
