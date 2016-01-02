@@ -16,6 +16,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
 
 
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_location_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_units_key)));
     }
 
 
